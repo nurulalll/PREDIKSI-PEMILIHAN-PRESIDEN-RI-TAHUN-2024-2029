@@ -1,4 +1,7 @@
-pip install plotly
+git clone https://github.com/plotly/plotly.py.git
+cd plotly.py
+pip install .
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
