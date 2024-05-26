@@ -1,13 +1,1 @@
-plotly
-plotly-express
-numpy
-packaging
-pandas
-patsy
-python-dateutil
-pytz
-scipy
-six
-statsmodels
-tenacity
-tzdata
+
