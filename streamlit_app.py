@@ -53,6 +53,7 @@ def display_top_usernames(df):
     st.plotly_chart(fig)
 
 def text_sentiment():
+    global sentiment_analysis  # Menyatakan bahwa sentiment_analysis adalah variabel global
     st.title('Analisis Text Sentiment')
     input_text = st.text_area("Masukkan kalimat yang ingin di analisis:")
     button = st.button("Analisis")
