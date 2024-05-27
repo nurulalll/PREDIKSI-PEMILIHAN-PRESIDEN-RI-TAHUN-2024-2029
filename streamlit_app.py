@@ -5,6 +5,9 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from transformers import pipeline
 
+# Inisialisasi global pipeline
+sentiment_analysis = pipeline("sentiment-analysis")
+
 def load_data(dataset_name):
     # Load dataset
     df = pd.read_excel(dataset_name)
@@ -54,7 +57,6 @@ def display_top_usernames(df):
 
 def text_sentiment():
     st.title('Analisis Text Sentiment')
-    sentiment_analysis = pipeline("sentiment-analysis")
     input_text = st.text_area("Masukkan kalimat yang ingin di analisis:")
     button = st.button("Analisis")
 
@@ -65,7 +67,7 @@ def text_sentiment():
         st.write(f"**Sentimen:** <span style='color:{sentiment_color}; font-weight:bold;'>{result['label']}</span>", 
                  f"**Score:** {result['score']:.2f}", 
                  unsafe_allow_html=True)
-
+        
 def main():
     st.set_page_config(page_title='Sentiment Analysis Dashboard')
 
