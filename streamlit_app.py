@@ -71,24 +71,22 @@ def text_sentiment():
 
 def main():
     st.set_page_config(page_title='Sentiment Analysis Dashboard')
-
     header()
-
+    
     dataset_names = {
         "Anies-CakImin": "Dataset_Anies-CakImin.xlsx",
         "Prabowo-Gibran": "Dataset_Prabowo-Gibran.xlsx",
         "Ganjar-Mahfud": "Dataset_Ganjar-Mahfud.xlsx"
     }
-
     selected_datasets = st.multiselect("Select Datasets", list(dataset_names.keys()))
-
+    
     page = st.radio("Navigate", ["Visualisasi", "Text Sentiment"])
 
-    dfs = [load_data(dataset_names[dataset]) for dataset in selected_datasets]
-    df = pd.concat(dfs) if dfs else None
+    if selected_datasets:
+        dfs = [load_data(dataset_names[dataset]) for dataset in selected_datasets]
+        df = pd.concat(dfs, ignore_index=True) if dfs else None
 
-    if page == 'Visualisasi':
-        if df is not None:
+        if page == 'Visualisasi' and df is not None:
             visualization_options = st.multiselect("Choose Visualizations", ["Word Cloud", "Sentiment Distribution", "Top Usernames"])
             if "Word Cloud" in visualization_options:
                 display_wordcloud(df)
@@ -96,9 +94,8 @@ def main():
                 display_sentiment_distribution(df)
             if "Top Usernames" in visualization_options:
                 display_top_usernames(df)
-
-    elif page == 'Text Sentiment':
-        text_sentiment()
+        elif page == 'Text Sentiment':
+            text_sentiment()
 
 if __name__ == "__main__":
     main()
