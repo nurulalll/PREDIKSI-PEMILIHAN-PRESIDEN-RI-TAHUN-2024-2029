@@ -5,6 +5,13 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from transformers import pipeline
 
+# Initialize the sentiment_analysis pipeline globally
+try:
+    sentiment_analysis = pipeline("sentiment-analysis")
+except Exception as e:
+    st.error(f"Failed to load sentiment analysis model: {str(e)}")
+    sentiment_analysis = None  # Ensure it's set to None if it fails
+    
 def load_data(dataset_name):
     # Load dataset
     df = pd.read_excel(dataset_name)
@@ -54,17 +61,18 @@ def display_top_usernames(df):
 
 def text_sentiment():
     st.title('Analisis Text Sentiment')
-    # sentiment_analysis = pipeline("sentiment-analysis")
     input_text = st.text_area("Masukkan kalimat yang ingin di analisis:")
     button = st.button("Analisis")
 
-    if button:
+    if button and sentiment_analysis:
         with st.spinner("Sedang menganalisis..."):
             result = sentiment_analysis(input_text)[0]
         sentiment_color = "green" if result['label'] == 'POSITIVE' else "red" if result['label'] == 'NEGATIVE' else "black"
         st.write(f"**Sentimen:** <span style='color:{sentiment_color}; font-weight:bold;'>{result['label']}</span>", 
                  f"**Score:** {result['score']:.2f}", 
                  unsafe_allow_html=True)
+    elif not sentiment_analysis:
+        st.error("Sentiment analysis model is not loaded.")
         
 def main():
     st.set_page_config(page_title='Sentiment Analysis Dashboard')
