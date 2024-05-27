@@ -5,6 +5,9 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from transformers import pipeline
 
+# Initialize sentiment analysis pipeline globally
+sentiment_analysis = pipeline("sentiment-analysis")
+
 def load_data(dataset_name):
     # Load dataset
     df = pd.read_excel(dataset_name)
@@ -53,7 +56,7 @@ def display_top_usernames(df):
     st.plotly_chart(fig)
 
 def text_sentiment():
-    global sentiment_analysis  # Menyatakan bahwa sentiment_analysis adalah variabel global
+    # Sentiment Analysis Text Input and Result Display
     st.title('Analisis Text Sentiment')
     input_text = st.text_area("Masukkan kalimat yang ingin di analisis:")
     button = st.button("Analisis")
