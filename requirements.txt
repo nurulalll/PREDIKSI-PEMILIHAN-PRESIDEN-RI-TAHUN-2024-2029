@@ -2,4 +2,4 @@ streamlit
 wordcloud
 transformers
 openpyxl
-pipeline
+pipeline("sentiment-analysis")
