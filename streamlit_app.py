@@ -54,16 +54,13 @@ def display_top_usernames(df):
 
 def text_sentiment():
     st.title('Analisis Text Sentiment')
-    sentiment_analysis = pipeline("sentiment-analysis")
-    input_text = st.text_area("Masukkan kalimat yang ingin di  analisis:")
+    input_text = st.text_area("Masukkan kalimat yang ingin di analisis:")
     button = st.button("Analisis")
 
     if button:
         with st.spinner("Sedang menganalisis..."):
             result = sentiment_analysis(input_text)[0]
-        # Menentukan warna teks berdasarkan sentimen
         sentiment_color = "green" if result['label'] == 'POSITIVE' else "red" if result['label'] == 'NEGATIVE' else "black"
-        # Menampilkan hasil analisis dengan gaya teks yang menarik
         st.write(f"**Sentimen:** <span style='color:{sentiment_color}; font-weight:bold;'>{result['label']}</span>", 
                  f"**Score:** {result['score']:.2f}", 
                  unsafe_allow_html=True)
