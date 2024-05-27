@@ -54,7 +54,7 @@ def display_top_usernames(df):
 
 def text_sentiment():
     st.title('Analisis Text Sentiment')
-    # sentiment_analysis = pipeline("sentiment-analysis")
+    sentiment_analysis = pipeline("sentiment-analysis")
     input_text = st.text_area("Masukkan kalimat yang ingin di analisis:")
     button = st.button("Analisis")
 
