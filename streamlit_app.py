@@ -5,9 +5,6 @@ from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from transformers import pipeline
 
-# Initialize sentiment analysis pipeline globally
-sentiment_analysis = pipeline("sentiment-analysis")
-
 def load_data(dataset_name):
     # Load dataset
     df = pd.read_excel(dataset_name)
@@ -56,8 +53,8 @@ def display_top_usernames(df):
     st.plotly_chart(fig)
 
 def text_sentiment():
-    # Sentiment Analysis Text Input and Result Display
     st.title('Analisis Text Sentiment')
+    # sentiment_analysis = pipeline("sentiment-analysis")
     input_text = st.text_area("Masukkan kalimat yang ingin di analisis:")
     button = st.button("Analisis")
 
@@ -71,22 +68,24 @@ def text_sentiment():
 
 def main():
     st.set_page_config(page_title='Sentiment Analysis Dashboard')
+
     header()
-    
+
     dataset_names = {
         "Anies-CakImin": "Dataset_Anies-CakImin.xlsx",
         "Prabowo-Gibran": "Dataset_Prabowo-Gibran.xlsx",
         "Ganjar-Mahfud": "Dataset_Ganjar-Mahfud.xlsx"
     }
+
     selected_datasets = st.multiselect("Select Datasets", list(dataset_names.keys()))
-    
+
     page = st.radio("Navigate", ["Visualisasi", "Text Sentiment"])
 
-    if selected_datasets:
-        dfs = [load_data(dataset_names[dataset]) for dataset in selected_datasets]
-        df = pd.concat(dfs, ignore_index=True) if dfs else None
+    dfs = [load_data(dataset_names[dataset]) for dataset in selected_datasets]
+    df = pd.concat(dfs) if dfs else None
 
-        if page == 'Visualisasi' and df is not None:
+    if page == 'Visualisasi':
+        if df is not None:
             visualization_options = st.multiselect("Choose Visualizations", ["Word Cloud", "Sentiment Distribution", "Top Usernames"])
             if "Word Cloud" in visualization_options:
                 display_wordcloud(df)
@@ -94,8 +93,9 @@ def main():
                 display_sentiment_distribution(df)
             if "Top Usernames" in visualization_options:
                 display_top_usernames(df)
-        elif page == 'Text Sentiment':
-            text_sentiment()
+
+    elif page == 'Text Sentiment':
+        text_sentiment()
 
 if __name__ == "__main__":
     main()
