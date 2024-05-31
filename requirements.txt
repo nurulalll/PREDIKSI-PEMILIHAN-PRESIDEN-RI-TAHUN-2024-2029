@@ -1,5 +1,4 @@
 python
-python download_nltk_data.py
 plotly
 plotly.express
 streamlit
