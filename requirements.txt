@@ -6,3 +6,4 @@ transformers
 openpyxl
 pipeline
 vaderSentiment
+googletrans 
