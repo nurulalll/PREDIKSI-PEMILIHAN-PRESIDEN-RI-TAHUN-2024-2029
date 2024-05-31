@@ -73,7 +73,7 @@ def text_sentiment():
     if button:
         with st.spinner("Sedang menganalisis..."):
             result = sentiment_analysis(input_text)
-        sentiment_color = "green" if result['label'] == 'POSITIVE' else "red" if result['label'] == 'NEGATIVE' else "black"
+        sentiment_color = "green" if result['label'] == 'POSITIVE' else "red" if result['label'] == 'NEGATIVE' else "blue"
         st.write(f"**Sentimen:** <span style='color:{sentiment_color}; font-weight:bold;'>{result['label']}</span>", 
                  f"**Score:** {result['score']:.2f}", 
                  unsafe_allow_html=True)
