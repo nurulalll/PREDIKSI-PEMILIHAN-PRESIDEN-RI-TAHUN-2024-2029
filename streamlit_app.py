@@ -4,7 +4,8 @@ import plotly.express as px
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from transformers import pipeline
-    
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
 def load_data(dataset_name):
     # Load dataset
     df = pd.read_excel(dataset_name)
@@ -52,6 +53,18 @@ def display_top_usernames(df):
     fig.update_layout(width=800, height=400, xaxis={'categoryorder':'total descending'})
     st.plotly_chart(fig)
 
+def sentiment_analysis(text):
+    analyzer = SentimentIntensityAnalyzer()
+    scores = analyzer.polarity_scores(text)
+    compound_score = scores['compound']
+    if compound_score >= 0.05:
+        label = 'POSITIVE'
+    elif compound_score <= -0.05:
+        label = 'NEGATIVE'
+    else:
+        label = 'NEUTRAL'
+    return {'label': label, 'score': compound_score}
+
 def text_sentiment():
     st.title('Analisis Text Sentiment')
     input_text = st.text_area("Masukkan kalimat yang ingin di analisis:")
@@ -59,12 +72,12 @@ def text_sentiment():
 
     if button:
         with st.spinner("Sedang menganalisis..."):
-            result = sentiment_analysis(input_text)[0]
+            result = sentiment_analysis(input_text)
         sentiment_color = "green" if result['label'] == 'POSITIVE' else "red" if result['label'] == 'NEGATIVE' else "black"
         st.write(f"**Sentimen:** <span style='color:{sentiment_color}; font-weight:bold;'>{result['label']}</span>", 
                  f"**Score:** {result['score']:.2f}", 
                  unsafe_allow_html=True)
-        
+
 def main():
     st.set_page_config(page_title='Sentiment Analysis Dashboard')
 
