@@ -5,3 +5,4 @@ wordcloud
 transformers
 openpyxl
 pipeline
+vaderSentiment
