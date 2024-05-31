@@ -1,3 +1,5 @@
+plotly
+plotly.express
 streamlit
 wordcloud
 transformers
