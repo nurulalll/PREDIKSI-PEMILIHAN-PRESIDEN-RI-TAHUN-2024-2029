@@ -8,4 +8,4 @@ pipeline
 vaderSentiment
 deep-translator 
 nltk
-nltk.download('vader_lexicon')
+nltk.sentiment.vader
