@@ -5,8 +5,8 @@ import plotly.express as px
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from transformers import pipeline
-import nltk
-nltk.download('vader_lexicon')
+from deep_translator import GoogleTranslator, exceptions
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 def load_data(dataset_name):
     # Load dataset
