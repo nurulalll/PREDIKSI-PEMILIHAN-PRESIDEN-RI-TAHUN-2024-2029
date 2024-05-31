@@ -5,7 +5,8 @@ import plotly.express as px
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from transformers import pipeline
-from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+import nltk
+nltk.download('vader_lexicon')
 
 def load_data(dataset_name):
     # Load dataset
@@ -54,15 +55,29 @@ def display_top_usernames(df):
     fig.update_layout(width=800, height=400, xaxis={'categoryorder':'total descending'})
     st.plotly_chart(fig)
 
+import streamlit as st
+from deep_translator import GoogleTranslator, exceptions
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import nltk
+
+# Ensure the VADER lexicon is downloaded
+nltk.download('vader_lexicon')
+
 def translate_to_english(text):
-    translator = Translator()
-    translated_text = translator.translate(text, src='id', dest='en').text
-    return translated_text
+    try:
+        translator = GoogleTranslator(source='auto', target='en')
+        translated_text = translator.translate(text)
+        return translated_text
+    except exceptions.TranslationNotFound:
+        return "Translation service unavailable."
 
 def sentiment_analysis(text):
     # Translate teks ke bahasa Inggris
     english_text = translate_to_english(text)
     
+    if english_text == "Translation service unavailable.":
+        return {'label': 'ERROR', 'score': 0.0}
+
     # Membuat instance dari SentimentIntensityAnalyzer
     analyzer = SentimentIntensityAnalyzer()
 
@@ -79,6 +94,29 @@ def sentiment_analysis(text):
         label = 'NEUTRAL'
 
     return {'label': label, 'score': compound_score}
+
+def text_sentiment():
+    st.title('Analisis Text Sentiment')
+    input_text = st.text_area("Masukkan kalimat yang ingin di analisis:")
+    button = st.button("Analisis")
+
+    if button:
+        with st.spinner("Sedang menganalisis..."):
+            result = sentiment_analysis(input_text)
+        if result['label'] == 'ERROR':
+            st.write("Terjadi kesalahan dalam menerjemahkan teks.")
+        else:
+            sentiment_color = "green" if result['label'] == 'POSITIVE' else "red" if result['label'] == 'NEGATIVE' else "blue"
+            st.write(f"**Sentimen:** <span style='color:{sentiment_color}; font-weight:bold;'>{result['label']}</span>", 
+                     f"**Score:** {result['score']:.2f}", 
+                     unsafe_allow_html=True)
+
+def main():
+    text_sentiment()
+
+if __name__ == "__main__":
+    main()
+
 
 def text_sentiment():
     st.title('Analisis Text Sentiment')
