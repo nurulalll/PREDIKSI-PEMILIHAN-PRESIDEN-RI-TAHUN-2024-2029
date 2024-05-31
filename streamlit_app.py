@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from googletrans import Translator
 import plotly.express as px
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
@@ -53,16 +54,30 @@ def display_top_usernames(df):
     fig.update_layout(width=800, height=400, xaxis={'categoryorder':'total descending'})
     st.plotly_chart(fig)
 
+def translate_to_english(text):
+    translator = Translator()
+    translated_text = translator.translate(text, src='id', dest='en').text
+    return translated_text
+
 def sentiment_analysis(text):
+    # Translate teks ke bahasa Inggris
+    english_text = translate_to_english(text)
+    
+    # Membuat instance dari SentimentIntensityAnalyzer
     analyzer = SentimentIntensityAnalyzer()
-    scores = analyzer.polarity_scores(text)
+
+    # Melakukan analisis sentimen pada teks yang telah diterjemahkan
+    scores = analyzer.polarity_scores(english_text)
     compound_score = scores['compound']
+
+    # Menentukan label sentimen berdasarkan nilai compound
     if compound_score >= 0.05:
         label = 'POSITIVE'
     elif compound_score <= -0.05:
         label = 'NEGATIVE'
     else:
         label = 'NEUTRAL'
+
     return {'label': label, 'score': compound_score}
 
 def text_sentiment():
